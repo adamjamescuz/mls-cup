@@ -1,0 +1,19 @@
+// set min-width to avoid layout from breaking on really small screens
+
+html,
+body {
+    min-width: 280px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+  background: #000;
+}
+
+a, a:hover, a:visited, a:active, a:focus {
+  text-decoration: none;
+  color:#da0000;
+}

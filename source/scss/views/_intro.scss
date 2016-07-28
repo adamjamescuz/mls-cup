@@ -1,0 +1,31 @@
+#intro-view {
+
+    #canvas {
+        width:100%;
+        height:100%;
+        background: none;
+    }
+
+    .scaler {
+        position: absolute;
+		z-index: 1;
+		bottom:0;
+		left: 50%;
+		height: 1050px;
+		width:2000px;
+		margin: 0 -1000px;
+		-webkit-transform: scale(1,1);
+		transform: scale(1,1);
+        transform-origin:center bottom;
+    }
+
+    .cup {
+        position: absolute;
+        left:50%;
+        bottom:-986px;
+        margin: 0 -297px;
+        width:593px;
+        height:986px;
+	    background: url("images/intro/cup.png") no-repeat;
+    }
+}

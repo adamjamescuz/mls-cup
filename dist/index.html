@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="no-scroll">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <title>Undertone London MLS Cup Assigment - ADAM COUSINS</title>
+
+        <!--SCSS compiled stylsheet -->
+        <link href="assets/site.css" rel="stylesheet" type="text/css" />
+
+        <!--Bower components injection  -->
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
+        <script src="bower_components/underscore/underscore-min.js"></script>
+        <script src="bower_components/victor/build/victor.min.js"></script>
+        <script src="bower_components/jquery-touchswipe/jquery.touchSwipe.min.js"></script>
+
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    <body touch-action="none">
+
+        <div class="desktop-wrapper">
+
+            <!-- Transition Fader -->
+            <div id="fader" class="fader"></div>
+
+            <!-- Loader Overlay -->
+            <div id="loader-container" class="overlay fade-off">
+                <img src="assets/images/core/loader.svg" class="loader">
+            </div>
+
+            <!-- Intro Cup view -->
+            <div id="intro-view" class="view">
+                <div class="scaler">
+                    <div class="cup"></div>
+                </div>
+                <canvas id="canvas" width="2000" height="1050" style="background:none"></canvas>
+            </div>
+
+            <!-- One Game view -->
+            <div id="team-vs-team-view" class="view">
+                <div class="scaler">
+                    <div id="portland-wedge" class="team-wedge"></div>
+                    <div id="dallas-wedge" class="team-wedge"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- External Non - Bower Libraries and Dependencies  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/plugins/CSSPlugin.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/easing/EasePack.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TweenMax.min.js"></script>
+        <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+        <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+
+
+        <!-- Concatenated Applicaton Scripts  -->
+        <script src="js/lib.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

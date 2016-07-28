@@ -1,0 +1,20 @@
+#loader-container {
+    text-align: center;
+    display: block;
+    background-color: rgba(0,0,0,0.4);
+    pointer-events: none;
+
+    .loader {
+        @include vertical-align(relative);
+        position: relative;
+        text-align: center;
+        margin:0 auto;
+        width:50px;
+    }
+
+    @media (min-width: 768px) {
+        .loader {
+            width: 100px;
+        }
+    }
+}

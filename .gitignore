@@ -1,0 +1,5 @@
+design-assets
+bower_components
+.sass-cache
+node_modules
+.DS_Store

@@ -75,6 +75,12 @@ $.extend(ViewControllerBase.prototype, {
         this.elem[0].dispatchEvent(event);
     },
 
+    showOtherView: function(page)
+    {
+        var event = new CustomEvent('ShowOtherView', {'detail': {page:page}});
+        this.elem[0].dispatchEvent(event);
+    },
+
     // override for more snazzy transitions
     transitionOut: function()
     {

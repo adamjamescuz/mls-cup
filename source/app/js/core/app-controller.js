@@ -1,15 +1,15 @@
 // Author: Adam James Cousins
 // lightweight single page application controller
-// site structure is defined in the site model JSON that is passed in
-// PageViewController base class defined common page functinality
-// individual view controllers override PageViewControler base class with bespoke functionality
+// site structure is defined in the site model JSON that is passed in from __main.js
+// PageViewController base class defines common page functinality
+// individual view controllers override PageViewControler base class with bespoke view functionality
 
 var ApplicationController = function(siteModel)
 {
     this.siteModel = siteModel;
     this.activeViewController = null;
     this.previousViewController = null;
-    this.controllers = {};
+    this.views = {};
     this.viewsReadyToRun = [];
     this.loader = {};
     this.nextViewAfterTranstion;
@@ -18,7 +18,7 @@ var ApplicationController = function(siteModel)
 // $.extend() allows us to use jquery inside our class and registers view event handlers
 $.extend(ApplicationController.prototype, {
 
-    // creates view controllers based on site model
+    // creates view views based on site model
     init: function()
     {
         this.loader = new Loader("#loader-container");
@@ -33,7 +33,7 @@ $.extend(ApplicationController.prototype, {
 
             var viewController = {};
 
-            // TODO: ApplicationController should now know about other view controllers
+            // TODO: ApplicationController should now know about other view views
             // need to replace this with 'window[classname]' to instantiate
             switch (pageConfig.name)
             {
@@ -50,10 +50,11 @@ $.extend(ApplicationController.prototype, {
                 console.error('unknown view in config');
             }
 
-            scope.controllers[pageConfig.name] = viewController;
+            scope.views[pageConfig.name] = viewController;
             viewController.elem[0].addEventListener('TransitionOutComplete', function (e) { scope.handleTransitionOut(e.detail.config); }, false);
             viewController.elem[0].addEventListener('TransitionIn', function (e) { scope.handleTransitionIn(); }, false);
             viewController.elem[0].addEventListener('NavigateTo', function (e) { scope.handleNavigateTo(e.detail.page); }, false);
+            viewController.elem[0].addEventListener('ShowOtherView', function (e) { scope.handleShowOtherView(e.detail.page); }, false);
             viewController.elem[0].addEventListener('Ready', function (e) { scope.handlePageIsReady(e.detail.config); }, false);
         }, this);
 
@@ -62,7 +63,7 @@ $.extend(ApplicationController.prototype, {
         {
             _.forEach(this.siteModel.viewsRequiredToRun, function(view)
             {
-                this.controllers[view].setup();
+                this.views[view].setup();
             }, this);
         }
         else
@@ -103,6 +104,12 @@ $.extend(ApplicationController.prototype, {
             this.hideLoader();
             this.activeViewController.transitionIn();
         }
+    },
+
+    handleShowOtherView: function(view)
+    {
+        var viewToShow = this.views[view];
+        viewToShow.show();
     },
 
     handleNavigateTo: function(page)
@@ -160,7 +167,7 @@ $.extend(ApplicationController.prototype, {
         //this.hideAllViews();
         //this.showLoader();
 
-        this.activeViewController = this.controllers[view];
+        this.activeViewController = this.views[view];
         this.activeViewController.init();
     },
 

@@ -8,7 +8,8 @@ var FinalFrameView = function(config)
     this.timeline = {};
 
     // DOM elements
-    this.scaler = this.elem.find(".scaler");
+    this.infoScaler = this.elem.find(".info-scaler");
+    this.mlsCup = this.elem.find("#mls-cup");
 };
 inheritsFrom(FinalFrameView, ViewControllerBase);
 
@@ -16,16 +17,9 @@ inheritsFrom(FinalFrameView, ViewControllerBase);
 $.extend(FinalFrameView.prototype, {
 
 	// ViewControllerBase overridden methods
-
-    transitionIn: function()
-    {
-        var scope = this;
-
-        ViewControllerBase.prototype.transitionIn.call(this);
-    },
-
     handleLoadComplete: function()
     {
+        console.log('FinalFrameView handleLoadComplete');
         var scope = this;
 
         // dom event handlers
@@ -34,6 +28,14 @@ $.extend(FinalFrameView.prototype, {
 
         // page is ready
         this.dispatchIsReady();
+    },
+
+    transitionIn: function()
+    {
+        console.log("FinalFrameView transition in");
+        var scope = this;
+
+        ViewControllerBase.prototype.transitionIn.call(this);
     },
 
     // Event handlers
@@ -46,6 +48,7 @@ $.extend(FinalFrameView.prototype, {
         var ratioW = newWidth / app.siteModel.properties.width;
 
         var ratio = Math.min(Math.min(ratioH, ratioW), 1);
-        this.scaler.css("transform", "scale(" + ratio + ")");
+        this.mlsCup.css("transform", "scale(" + ratio + ")");
+        this.infoScaler.css("transform", "scale(" + ratio + ")");
     }
 });

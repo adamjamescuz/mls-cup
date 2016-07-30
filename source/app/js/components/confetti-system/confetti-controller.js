@@ -1,5 +1,5 @@
-// Simple particle system to simulate Confetti
-
+// Simple particle system to simulate simple Confetti
+// Author: Adam Cousins
 var ConfettiController = function(loader, bitmapID, w, h, origin, maxParticles, alpha)
 {
 	this.loader = loader;
@@ -19,7 +19,7 @@ var ConfettiController = function(loader, bitmapID, w, h, origin, maxParticles, 
 		this.container.y = this.screenHeight * .5;
 	}
 
-	// blend mode for the particles (lighter = add)
+	// blend mode for the particles
 	this.blendMode = "source-over";
 
 	// alpha multiplier - 1 = max opacity, 0.42 = default
@@ -88,6 +88,11 @@ $.extend(ConfettiController.prototype, {
     		particle.scaleX *= -1;
     	}
     },
+
+	stop: function()
+	{
+		createjs.Ticker.reset();
+	},
 
     update: function()
     {

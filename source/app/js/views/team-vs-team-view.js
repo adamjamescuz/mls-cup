@@ -29,7 +29,6 @@ inheritsFrom(TeamVsTeamView, ViewControllerBase);
 $.extend(TeamVsTeamView.prototype, {
 
 	// Overridden methods
-
     handleLoadComplete: function()
     {
         console.log('team vs team: load complete');
@@ -77,16 +76,23 @@ $.extend(TeamVsTeamView.prototype, {
         this.inTimeline.set(this.portlandLogo, { scaleX:5, scaleY:5, opacity:0 });
         this.inTimeline.to(this.dallasLogo, 0.4, { scaleX:1, scaleY:1, opacity:1, ease:Power2.easeIn });
         this.inTimeline.to(this.portlandLogo, 0.4, { scaleX:1, scaleY:1, opacity:1, ease:Power2.easeIn }, "-=0.4");
+
+        // navigate out
+        this.inTimeline.add(function(){ scope.navigateTo("final-frame")}, "+=2");
     },
 
     transitionOut: function()
     {
-        this.inTimeline.to(this.one, 0.4, { opacity:0, ease:Power2.easeOut });
-        this.inTimeline.to(this.game, 0.4, { opacity:0, ease:Power2.easeOut }, "-=0.4");
-        this.inTimeline.to(this.toGlory, 0.4, { opacity:0, ease:Power2.easeOut }, "-=0.4");
+        var scope = this;
+
+        this.outTimeline.add(function(){ scope.showOtherView("final-frame"); });
+        this.outTimeline.to(this.toGlory, 0.3, { opacity:0, ease:Power2.easeOut });
+        this.outTimeline.to(this.game, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
+        this.outTimeline.to(this.one, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
         this.outTimeline.to(this.portlandWedge, 1, { left:-1498, ease:Quad.easeOut });
         this.outTimeline.to(this.dallasWedge, 1, { right:-1557, ease:Quad.easeOut }, "-=1");
         this.outTimeline.to(this.fader, 1, { opacity:0, ease:Quad.easeOut }, "-=1");
+        this.outTimeline.add(function(){ scope.dispatchTransitionOutComplete(); });
     },
 
     show: function()

@@ -12,6 +12,9 @@ var IntroViewController = function(config)
     // DOM elements
     this.scaler = this.elem.find(".scaler");
     this.cup = this.elem.find(".cup");
+
+    // properties
+    this.confettiParticles = 600;
 };
 inheritsFrom(IntroViewController, ViewControllerBase);
 
@@ -36,7 +39,7 @@ $.extend(IntroViewController.prototype, {
         this.timeline = new TimelineMax({ onComplete:function() { } });
 
         // create the confetti
-        this.confettiController = new ConfettiController(this.loader, "confetti-", app.siteModel.properties.width, app.siteModel.properties.height, {x:0, y:0}, 600, 1);
+        this.confettiController = new ConfettiController(this.loader, "confetti-", app.siteModel.properties.width, app.siteModel.properties.height, {x:0, y:0}, this.confettiParticles, 1);
         this.stage.addChild(this.confettiController.container);
 
         // dom event handlers
@@ -56,7 +59,10 @@ $.extend(IntroViewController.prototype, {
 
         this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
         this.timeline.add(function() { scope.confettiController.initParticles(); }, "-=1");
-        this.timeline.add(function() { scope.navigateTo("team-vs-team") }, "+=3");
+        this.timeline.add(function() {
+            scope.confettiController.stop();
+            scope.navigateTo("team-vs-team");
+        }, "+=5");
     },
 
     // clean up - remove the confetti

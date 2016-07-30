@@ -48,7 +48,7 @@ $(document).ready(function () {
         }
     ],
     viewsRequiredToRun:[
-        "intro","team-vs-team"
+        "intro","team-vs-team", "final-frame"
     ],
     startPage: "intro",
     loader:"#loader"

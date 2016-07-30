@@ -23,6 +23,6 @@ $.extend(Loader.prototype, {
     hide: function()
     {
         var scope = this;
-        TweenMax.to(this.elem[0], 0.4, {opacity:0, ease:Power2.easeOut, onComplete:function() { scope.elem.css('display', 'none'); } });
+        TweenMax.to(this.elem[0], 0.2, {opacity:0, ease:Power2.easeOut, onComplete:function() { scope.elem.css('display', 'none'); } });
     }
 });

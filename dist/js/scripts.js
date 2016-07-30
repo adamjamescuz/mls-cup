@@ -48,7 +48,7 @@ $(document).ready(function () {
         }
     ],
     viewsRequiredToRun:[
-        "intro","team-vs-team"
+        "intro","team-vs-team", "final-frame"
     ],
     startPage: "intro",
     loader:"#loader"
@@ -135,8 +135,8 @@ window.requestAnimFrame = (function() {
         };
 })();
 
-// Simple particle system to simulate Confetti
-
+// Simple particle system to simulate simple Confetti
+// Author: Adam Cousins
 var ConfettiController = function(loader, bitmapID, w, h, origin, maxParticles, alpha)
 {
 	this.loader = loader;
@@ -156,7 +156,7 @@ var ConfettiController = function(loader, bitmapID, w, h, origin, maxParticles, 
 		this.container.y = this.screenHeight * .5;
 	}
 
-	// blend mode for the particles (lighter = add)
+	// blend mode for the particles
 	this.blendMode = "source-over";
 
 	// alpha multiplier - 1 = max opacity, 0.42 = default
@@ -225,6 +225,11 @@ $.extend(ConfettiController.prototype, {
     		particle.scaleX *= -1;
     	}
     },
+
+	stop: function()
+	{
+		createjs.Ticker.reset();
+	},
 
     update: function()
     {
@@ -391,7 +396,7 @@ $.extend(Loader.prototype, {
     hide: function()
     {
         var scope = this;
-        TweenMax.to(this.elem[0], 0.4, {opacity:0, ease:Power2.easeOut, onComplete:function() { scope.elem.css('display', 'none'); } });
+        TweenMax.to(this.elem[0], 0.2, {opacity:0, ease:Power2.easeOut, onComplete:function() { scope.elem.css('display', 'none'); } });
     }
 });
 
@@ -472,6 +477,12 @@ $.extend(ViewControllerBase.prototype, {
         this.elem[0].dispatchEvent(event);
     },
 
+    showOtherView: function(page)
+    {
+        var event = new CustomEvent('ShowOtherView', {'detail': {page:page}});
+        this.elem[0].dispatchEvent(event);
+    },
+
     // override for more snazzy transitions
     transitionOut: function()
     {
@@ -518,16 +529,16 @@ $.extend(ViewControllerBase.prototype, {
 
 // Author: Adam James Cousins
 // lightweight single page application controller
-// site structure is defined in the site model JSON that is passed in
-// PageViewController base class defined common page functinality
-// individual view controllers override PageViewControler base class with bespoke functionality
+// site structure is defined in the site model JSON that is passed in from __main.js
+// PageViewController base class defines common page functinality
+// individual view controllers override PageViewControler base class with bespoke view functionality
 
 var ApplicationController = function(siteModel)
 {
     this.siteModel = siteModel;
     this.activeViewController = null;
     this.previousViewController = null;
-    this.controllers = {};
+    this.views = {};
     this.viewsReadyToRun = [];
     this.loader = {};
     this.nextViewAfterTranstion;
@@ -536,7 +547,7 @@ var ApplicationController = function(siteModel)
 // $.extend() allows us to use jquery inside our class and registers view event handlers
 $.extend(ApplicationController.prototype, {
 
-    // creates view controllers based on site model
+    // creates view views based on site model
     init: function()
     {
         this.loader = new Loader("#loader-container");
@@ -551,7 +562,7 @@ $.extend(ApplicationController.prototype, {
 
             var viewController = {};
 
-            // TODO: ApplicationController should now know about other view controllers
+            // TODO: ApplicationController should now know about other view views
             // need to replace this with 'window[classname]' to instantiate
             switch (pageConfig.name)
             {
@@ -568,10 +579,11 @@ $.extend(ApplicationController.prototype, {
                 console.error('unknown view in config');
             }
 
-            scope.controllers[pageConfig.name] = viewController;
+            scope.views[pageConfig.name] = viewController;
             viewController.elem[0].addEventListener('TransitionOutComplete', function (e) { scope.handleTransitionOut(e.detail.config); }, false);
             viewController.elem[0].addEventListener('TransitionIn', function (e) { scope.handleTransitionIn(); }, false);
             viewController.elem[0].addEventListener('NavigateTo', function (e) { scope.handleNavigateTo(e.detail.page); }, false);
+            viewController.elem[0].addEventListener('ShowOtherView', function (e) { scope.handleShowOtherView(e.detail.page); }, false);
             viewController.elem[0].addEventListener('Ready', function (e) { scope.handlePageIsReady(e.detail.config); }, false);
         }, this);
 
@@ -580,7 +592,7 @@ $.extend(ApplicationController.prototype, {
         {
             _.forEach(this.siteModel.viewsRequiredToRun, function(view)
             {
-                this.controllers[view].setup();
+                this.views[view].setup();
             }, this);
         }
         else
@@ -621,6 +633,12 @@ $.extend(ApplicationController.prototype, {
             this.hideLoader();
             this.activeViewController.transitionIn();
         }
+    },
+
+    handleShowOtherView: function(view)
+    {
+        var viewToShow = this.views[view];
+        viewToShow.show();
     },
 
     handleNavigateTo: function(page)
@@ -678,7 +696,7 @@ $.extend(ApplicationController.prototype, {
         //this.hideAllViews();
         //this.showLoader();
 
-        this.activeViewController = this.controllers[view];
+        this.activeViewController = this.views[view];
         this.activeViewController.init();
     },
 
@@ -699,7 +717,8 @@ var FinalFrameView = function(config)
     this.timeline = {};
 
     // DOM elements
-    this.scaler = this.elem.find(".scaler");
+    this.infoScaler = this.elem.find(".info-scaler");
+    this.mlsCup = this.elem.find("#mls-cup");
 };
 inheritsFrom(FinalFrameView, ViewControllerBase);
 
@@ -707,16 +726,9 @@ inheritsFrom(FinalFrameView, ViewControllerBase);
 $.extend(FinalFrameView.prototype, {
 
 	// ViewControllerBase overridden methods
-
-    transitionIn: function()
-    {
-        var scope = this;
-
-        ViewControllerBase.prototype.transitionIn.call(this);
-    },
-
     handleLoadComplete: function()
     {
+        console.log('FinalFrameView handleLoadComplete');
         var scope = this;
 
         // dom event handlers
@@ -725,6 +737,14 @@ $.extend(FinalFrameView.prototype, {
 
         // page is ready
         this.dispatchIsReady();
+    },
+
+    transitionIn: function()
+    {
+        console.log("FinalFrameView transition in");
+        var scope = this;
+
+        ViewControllerBase.prototype.transitionIn.call(this);
     },
 
     // Event handlers
@@ -737,7 +757,8 @@ $.extend(FinalFrameView.prototype, {
         var ratioW = newWidth / app.siteModel.properties.width;
 
         var ratio = Math.min(Math.min(ratioH, ratioW), 1);
-        this.scaler.css("transform", "scale(" + ratio + ")");
+        this.mlsCup.css("transform", "scale(" + ratio + ")");
+        this.infoScaler.css("transform", "scale(" + ratio + ")");
     }
 });
 
@@ -755,6 +776,9 @@ var IntroViewController = function(config)
     // DOM elements
     this.scaler = this.elem.find(".scaler");
     this.cup = this.elem.find(".cup");
+
+    // properties
+    this.confettiParticles = 600;
 };
 inheritsFrom(IntroViewController, ViewControllerBase);
 
@@ -779,7 +803,7 @@ $.extend(IntroViewController.prototype, {
         this.timeline = new TimelineMax({ onComplete:function() { } });
 
         // create the confetti
-        this.confettiController = new ConfettiController(this.loader, "confetti-", app.siteModel.properties.width, app.siteModel.properties.height, {x:0, y:0}, 600, 1);
+        this.confettiController = new ConfettiController(this.loader, "confetti-", app.siteModel.properties.width, app.siteModel.properties.height, {x:0, y:0}, this.confettiParticles, 1);
         this.stage.addChild(this.confettiController.container);
 
         // dom event handlers
@@ -799,7 +823,10 @@ $.extend(IntroViewController.prototype, {
 
         this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
         this.timeline.add(function() { scope.confettiController.initParticles(); }, "-=1");
-        this.timeline.add(function() { scope.navigateTo("team-vs-team") }, "+=3");
+        this.timeline.add(function() {
+            scope.confettiController.stop();
+            scope.navigateTo("team-vs-team");
+        }, "+=5");
     },
 
     // clean up - remove the confetti
@@ -856,7 +883,6 @@ inheritsFrom(TeamVsTeamView, ViewControllerBase);
 $.extend(TeamVsTeamView.prototype, {
 
 	// Overridden methods
-
     handleLoadComplete: function()
     {
         console.log('team vs team: load complete');
@@ -904,16 +930,23 @@ $.extend(TeamVsTeamView.prototype, {
         this.inTimeline.set(this.portlandLogo, { scaleX:5, scaleY:5, opacity:0 });
         this.inTimeline.to(this.dallasLogo, 0.4, { scaleX:1, scaleY:1, opacity:1, ease:Power2.easeIn });
         this.inTimeline.to(this.portlandLogo, 0.4, { scaleX:1, scaleY:1, opacity:1, ease:Power2.easeIn }, "-=0.4");
+
+        // navigate out
+        this.inTimeline.add(function(){ scope.navigateTo("final-frame")}, "+=2");
     },
 
     transitionOut: function()
     {
-        this.inTimeline.to(this.one, 0.4, { opacity:0, ease:Power2.easeOut });
-        this.inTimeline.to(this.game, 0.4, { opacity:0, ease:Power2.easeOut }, "-=0.4");
-        this.inTimeline.to(this.toGlory, 0.4, { opacity:0, ease:Power2.easeOut }, "-=0.4");
+        var scope = this;
+
+        this.outTimeline.add(function(){ scope.showOtherView("final-frame"); });
+        this.outTimeline.to(this.toGlory, 0.3, { opacity:0, ease:Power2.easeOut });
+        this.outTimeline.to(this.game, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
+        this.outTimeline.to(this.one, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
         this.outTimeline.to(this.portlandWedge, 1, { left:-1498, ease:Quad.easeOut });
         this.outTimeline.to(this.dallasWedge, 1, { right:-1557, ease:Quad.easeOut }, "-=1");
         this.outTimeline.to(this.fader, 1, { opacity:0, ease:Quad.easeOut }, "-=1");
+        this.outTimeline.add(function(){ scope.dispatchTransitionOutComplete(); });
     },
 
     show: function()

@@ -5843,14 +5843,13 @@ a, a:hover, a:visited, a:active, a:focus {
   top: 0;
   left: 0;
   background: url("../assets/images/PGX-Desktop.jpg") no-repeat;
-  background-position: center center;
+  background-position: top center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   width: 100%;
-  height: 100%;
-  transform-origin: center top; }
+  height: 100%; }
 
 .view {
   position: absolute;
@@ -5972,5 +5971,38 @@ a, a:hover, a:visited, a:active, a:focus {
     right: -1557px; }
     #team-vs-team-view .scaler #dallas-wedge #dallas-logo {
       right: 300px; }
+
+#final-frame-view {
+  background-color: #000;
+  background: url("../assets/images/final-frame/bg.jpg") no-repeat;
+  background-position: top center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
+  #final-frame-view #mls-cup {
+    position: absolute;
+    z-index: 2;
+    width: 437px;
+    left: 20px;
+    bottom: 20px;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+    transform-origin: bottom left; }
+  #final-frame-view .info-scaler {
+    position: absolute;
+    background-color: #cc0000;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 1050px;
+    width: 2000px;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+    transform-origin: top left; }
 
 /*# sourceMappingURL=site.css.map */

@@ -1,0 +1,37 @@
+#final-frame-view {
+    background-color: #000;
+	background: url("../assets/images/final-frame/bg.jpg") no-repeat;
+	background-position: top center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+    top: 0;
+	left: 0;
+	width:100%;
+	height:100%;
+
+    #mls-cup {
+        position: absolute;
+        z-index: 2;
+        width:437px;
+        left:20px;
+        bottom:20px;
+        -webkit-transform: scale(1,1);
+		transform: scale(1,1);
+        transform-origin:bottom left;
+    }
+
+    .info-scaler {
+        position: absolute;
+        background-color: #cc0000;
+		z-index: 1;
+		left:0;
+        top:0;
+		height: 1050px;
+		width:2000px;
+		-webkit-transform: scale(1,1);
+		transform: scale(1,1);
+        transform-origin:top left;
+    }
+}

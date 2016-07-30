@@ -1,6 +1,5 @@
 // global app controller reference
 var app;
-var formatDimensions = {x:2000, y:1050};
 
 $(document).ready(function () {
 
@@ -15,9 +14,8 @@ $(document).ready(function () {
         {
             id:0,
             name:"intro",
-            caption:"",
             elem:"#intro-view",
-            nav:false,
+            layerOrder:0,
             assets:[
                 {src:"assets/images/confetti/confetti-particle-0.png", id:"confetti-0"},
             	{src:"assets/images/confetti/confetti-particle-1.png", id:"confetti-1"},
@@ -27,10 +25,21 @@ $(document).ready(function () {
             	{src:"assets/images/confetti/confetti-particle-5.png", id:"confetti-5"},
                 {src:"assets/images/intro/cup.png", id:"cup"}
             ]
+        },
+        {
+            id:1,
+            name:"team-vs-team",
+            elem:"#team-vs-team-view",
+            layerOrder:1,
+            nav:false,
+            assets:[
+                {src:"assets/images/team-vs-team/dallas-wedge.png", id:"dallas-wedge"},
+                {src:"assets/images/team-vs-team/portland-wedge.png", id:"portland-wedge"},
+            ]
         }
     ],
     viewsRequiredToRun:[
-        "intro"
+        "intro","team-vs-team"
     ],
     startPage: "intro",
     loader:"#loader"

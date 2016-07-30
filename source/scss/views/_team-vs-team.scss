@@ -3,14 +3,14 @@
     .scaler {
         position: absolute;
 		z-index: 1;
-		bottom:0;
 		left: 50%;
+        top:50%;
 		height: 1050px;
 		width:2000px;
-		margin: 0 -1000px;
+		margin: -525px -1000px;
 		-webkit-transform: scale(1,1);
 		transform: scale(1,1);
-        transform-origin:center bottom;
+        transform-origin:center center;
     }
 
     .team-wedge {
@@ -19,16 +19,14 @@
     }
 
     #portland-wedge {
-        background: url("images/intro/cup.png") no-repeat;
+        background: url("images/team-vs-team/portland-wedge.png") no-repeat;
         width:1498px;
-        left:0;
+        left:-1498px;
     }
 
     #dallas-wedge {
-        background: url("images/intro/cup.png") no-repeat;
+        background: url("images/team-vs-team/dallas-wedge.png") no-repeat;
         width:1557px;
-        right:0
+        right:-1557px;
     }
-
-
 }

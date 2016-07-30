@@ -1,10 +1,11 @@
 // Base class for the view controllers
 // Indivudal view controllers extend this and override
 // certain methods for their own functionality
-var PageViewControllerBase = function(config)
+var ViewControllerBase = function(config)
 {
     this.config = config;
     this.elem = $(config.elem);
+    this.elem.css('z-index', this.config.layerOrder);
     this.loader = {};
     this.callbacks = [];
     this.transitionOutCallbacks = [];
@@ -17,7 +18,7 @@ var PageViewControllerBase = function(config)
 };
 
 
-$.extend(PageViewControllerBase.prototype, {
+$.extend(ViewControllerBase.prototype, {
 
     init: function()
     {
@@ -56,15 +57,18 @@ $.extend(PageViewControllerBase.prototype, {
         this.elem[0].dispatchEvent(event);
     },
 
+    // override for more snazzy transitions
     transitionOut: function()
     {
         console.log(this.config.name + ' : transition out');
-        var scope = this;
-        // default behaviour - just fade to black and call the transition out handler(s) override this in individual page controllers for fancy transition out
+        this.dispatchTransitionOutComplete();
+    },
 
-        TweenMax.to($("#fader"), 1, {opacity:1, ease:Back.easeOut, onComplete:function() {
-            scope.dispatchTransitionOutComplete();
-        }});
+    // for any post - transition clean up
+    destroy: function()
+    {
+        console.log(this.config.name + ' : destroy');
+        this.hide();
     },
 
     dispatchTransitionOutComplete: function()
@@ -73,17 +77,12 @@ $.extend(PageViewControllerBase.prototype, {
         this.elem[0].dispatchEvent(event);
     },
 
+    // override for more snazzy transitions
     transitionIn: function()
     {
         console.log(this.config.name + ' : transition in');
-        // default behaviour - just show the page (override this in individual page controllers for fancy transition in)
-        var scope = this;
-        TweenMax.set($("#fader"), { opacity:1 });
-        TweenMax.to($("#fader"), 2, {opacity:0, ease:Back.easeOut, onComplete:function() {
-        }});
-
-        scope.dispatchTransitionIn();
-        scope.show();
+        this.dispatchTransitionIn();
+        this.show();
     },
 
     dispatchTransitionIn: function()

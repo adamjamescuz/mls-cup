@@ -1,27 +1,27 @@
-// Extends PageViewController base
+// Extends ViewControllerBase
 var IntroViewController = function(config)
 {
+    // call base class constructor
+    ViewControllerBase.call(this, config);
+
     // class level members
     this.stage;
     this.confettiController = {};
     this.timeline = {};
 
-    // cache DOM elements once
-    this.scaler = $(".scaler");
-    this.cup = $(".cup");
-
-    // call base class constructor
-    PageViewControllerBase.call(this, config);
+    // DOM elements
+    this.scaler = this.elem.find(".scaler");
+    this.cup = this.elem.find(".cup");
 };
-inheritsFrom(IntroViewController, PageViewControllerBase);
+inheritsFrom(IntroViewController, ViewControllerBase);
 
-
+// Intro View Implementation
 $.extend(IntroViewController.prototype, {
 
-	// overridden methods
+	// ViewControllerBase overridden methods
     setup: function()
     {
-        console.log("intro view setup")
+        ViewControllerBase.prototype.setup.call(this);
     	var scope = this;
 
         // load the assets
@@ -30,6 +30,27 @@ $.extend(IntroViewController.prototype, {
         this.loader.loadManifest(this.config.assets);
     },
 
+    transitionIn: function()
+    {
+        var scope = this;
+
+        ViewControllerBase.prototype.transitionIn.call(this);
+
+        this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
+        this.timeline.add(TweenMax.delayedCall(1, function() { scope.confettiController.initParticles(); } ));
+        this.timeline.add(TweenMax.delayedCall(3, function() { scope.navigateTo("team-vs-team")} ));
+    },
+
+    // clean up - remove the confetti
+    destroy: function()
+    {
+        console.log("destroy intro view");
+        this.stage.removeChild(this.confettiController.container);
+        this.confettiController = null;
+        this.hide();
+    },
+
+    // Event Handlers
     handleLoadComplete: function()
     {
         var scope = this;
@@ -55,26 +76,6 @@ $.extend(IntroViewController.prototype, {
 
         // page is ready
         this.dispatchIsReady();
-    },
-
-    transitionIn: function()
-    {
-        var scope = this;
-
-        PageViewControllerBase.prototype.transitionIn.call(this);
-
-        this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
-        this.timeline.add(TweenMax.delayedCall(1, function() { scope.confettiController.initParticles(); } ));
-    },
-
-    transitionOut: function()
-    {
-        PageViewControllerBase.prototype.transitionOut.call(this);
-    },
-
-    show: function()
-    {
-        PageViewControllerBase.prototype.show.call(this);
     },
 
     handleResize: function(event)

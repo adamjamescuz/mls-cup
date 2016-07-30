@@ -1,6 +1,5 @@
 // global app controller reference
 var app;
-var formatDimensions = {x:2000, y:1050};
 
 $(document).ready(function () {
 
@@ -15,9 +14,8 @@ $(document).ready(function () {
         {
             id:0,
             name:"intro",
-            caption:"",
             elem:"#intro-view",
-            nav:false,
+            layerOrder:0,
             assets:[
                 {src:"assets/images/confetti/confetti-particle-0.png", id:"confetti-0"},
             	{src:"assets/images/confetti/confetti-particle-1.png", id:"confetti-1"},
@@ -27,10 +25,21 @@ $(document).ready(function () {
             	{src:"assets/images/confetti/confetti-particle-5.png", id:"confetti-5"},
                 {src:"assets/images/intro/cup.png", id:"cup"}
             ]
+        },
+        {
+            id:1,
+            name:"team-vs-team",
+            elem:"#team-vs-team-view",
+            layerOrder:1,
+            nav:false,
+            assets:[
+                {src:"assets/images/team-vs-team/dallas-wedge.png", id:"dallas-wedge"},
+                {src:"assets/images/team-vs-team/portland-wedge.png", id:"portland-wedge"},
+            ]
         }
     ],
     viewsRequiredToRun:[
-        "intro"
+        "intro","team-vs-team"
     ],
     startPage: "intro",
     loader:"#loader"
@@ -380,10 +389,11 @@ $.extend(Loader.prototype, {
 // Base class for the view controllers
 // Indivudal view controllers extend this and override
 // certain methods for their own functionality
-var PageViewControllerBase = function(config)
+var ViewControllerBase = function(config)
 {
     this.config = config;
     this.elem = $(config.elem);
+    this.elem.css('z-index', this.config.layerOrder);
     this.loader = {};
     this.callbacks = [];
     this.transitionOutCallbacks = [];
@@ -396,7 +406,7 @@ var PageViewControllerBase = function(config)
 };
 
 
-$.extend(PageViewControllerBase.prototype, {
+$.extend(ViewControllerBase.prototype, {
 
     init: function()
     {
@@ -435,15 +445,18 @@ $.extend(PageViewControllerBase.prototype, {
         this.elem[0].dispatchEvent(event);
     },
 
+    // override for more snazzy transitions
     transitionOut: function()
     {
         console.log(this.config.name + ' : transition out');
-        var scope = this;
-        // default behaviour - just fade to black and call the transition out handler(s) override this in individual page controllers for fancy transition out
+        this.dispatchTransitionOutComplete();
+    },
 
-        TweenMax.to($("#fader"), 1, {opacity:1, ease:Back.easeOut, onComplete:function() {
-            scope.dispatchTransitionOutComplete();
-        }});
+    // for any post - transition clean up
+    destroy: function()
+    {
+        console.log(this.config.name + ' : destroy');
+        this.hide();
     },
 
     dispatchTransitionOutComplete: function()
@@ -452,17 +465,12 @@ $.extend(PageViewControllerBase.prototype, {
         this.elem[0].dispatchEvent(event);
     },
 
+    // override for more snazzy transitions
     transitionIn: function()
     {
         console.log(this.config.name + ' : transition in');
-        // default behaviour - just show the page (override this in individual page controllers for fancy transition in)
-        var scope = this;
-        TweenMax.set($("#fader"), { opacity:1 });
-        TweenMax.to($("#fader"), 2, {opacity:0, ease:Back.easeOut, onComplete:function() {
-        }});
-
-        scope.dispatchTransitionIn();
-        scope.show();
+        this.dispatchTransitionIn();
+        this.show();
     },
 
     dispatchTransitionIn: function()
@@ -490,11 +498,12 @@ $.extend(PageViewControllerBase.prototype, {
 var ApplicationController = function(siteModel)
 {
     this.siteModel = siteModel;
-    this.currentController = null;
+    this.activeViewController = null;
+    this.previousViewController = null;
     this.controllers = {};
-    //this.navigationController = {};
     this.viewsReadyToRun = [];
     this.loader = {};
+    this.nextViewAfterTranstion;
 };
 
 // $.extend() allows us to use jquery inside our class and registers view event handlers
@@ -505,8 +514,6 @@ $.extend(ApplicationController.prototype, {
     {
         this.loader = new Loader("#loader-container");
         this.loader.init();
-        // this.navigationController = new NavigationController(this.siteModel.views);
-        // this.navigationController.init();
 
         // show the loader as we are initialising the app
         this.showLoader();
@@ -524,14 +531,17 @@ $.extend(ApplicationController.prototype, {
             case "intro":
                 viewController = new IntroViewController(pageConfig);
                 break;
+            case "team-vs-team":
+                viewController = new TeamVsTeamView(pageConfig);
+                break;
             default:
                 console.error('unknown view in config');
             }
 
             scope.controllers[pageConfig.name] = viewController;
             viewController.elem[0].addEventListener('TransitionOutComplete', function (e) { scope.handleTransitionOut(e.detail.config); }, false);
-            viewController.elem[0].addEventListener('NavigateTo', function (e) { scope.handleNavigateTo(e.detail.page); }, false);
             viewController.elem[0].addEventListener('TransitionIn', function (e) { scope.handleTransitionIn(); }, false);
+            viewController.elem[0].addEventListener('NavigateTo', function (e) { scope.handleNavigateTo(e.detail.page); }, false);
             viewController.elem[0].addEventListener('Ready', function (e) { scope.handlePageIsReady(e.detail.config); }, false);
         }, this);
 
@@ -579,7 +589,7 @@ $.extend(ApplicationController.prototype, {
         }
         else {
             this.hideLoader();
-            this.currentController.transitionIn();
+            this.activeViewController.transitionIn();
         }
     },
 
@@ -588,32 +598,22 @@ $.extend(ApplicationController.prototype, {
         this.navigateTo(page);
     },
 
-    // handleHashHasChanged: function()
-    // {
-    //     console.log('ApplicationController: hash change handler');
-    //
-    //     var hash = decodeURI(window.location.hash);
-    //
-    //     // transition out of current view
-    //     if (this.currentController === null)
-    //     {
-    //         this.initView(hash);
-    //     }
-    //     else
-    //     {
-    //         this.currentController.transitionOut();
-    //     }
-    // },
-
     handleTransitionIn: function()
     {
+        if (this.previousViewController !== null)
+        {
+            this.previousViewController.destroy();
+            this.previousViewController = null;
+        }
+
         this.hideLoader();
     },
 
     handleTransitionOut: function()
     {
-        this.currentController = null;
-        this.initView(decodeURI(window.location.hash));
+        this.previousViewController = this.activeViewController;
+        this.activeViewController = null;
+        this.initView(this.nextViewAfterTranstion);
     },
 
     // application controller implementation
@@ -622,60 +622,36 @@ $.extend(ApplicationController.prototype, {
         console.log("ApplicationController: start");
         var scope = this;
         this.navigateTo(this.siteModel.startPage);
-        // listen for url changes in the #
-        // $(window).on('hashchange', function()
-        // {
-        //     scope.handleHashHasChanged();
-        // });
-
-        // if we have url in the hash refresh or default to start page if /
-        // var url = decodeURI(window.location);
-        // console.log(url);
-        // if (window.location.hash === "")
-        // {
-        //     this.navigateTo(this.siteModel.startPage);
-        // }
-        // else
-        // {
-        //     this.initView(decodeURI(window.location.hash));
-        // }
     },
 
     navigateTo: function(name)
     {
         console.log("ApplicationController: navigate to: " + name);
-        //var page = _.findWhere(this.siteModel.views, { name:name });
-        if (this.currentController === null)
+        if (this.activeViewController === null)
         {
             this.initView(name);
         }
         else
         {
-            this.currentController.transitionOut();
+            this.nextViewAfterTranstion = name;
+            this.activeViewController.transitionOut();
         }
-        //$(location).attr('href', '#' + page.name);
     },
 
     initView: function(view)
     {
         console.log('ApplicationController: init view with name: ' + view);
-        this.hideAllViews();
-        this.showLoader();
+        //this.hideAllViews();
+        //this.showLoader();
 
-        //var page = url.replace("#","");
-
-        // update the nav
-        //this.navigationController.deactivateAll();
-        //this.navigationController.setActive(page);
-
-        this.currentController = this.controllers[view];
-        this.currentController.init();
+        this.activeViewController = this.controllers[view];
+        this.activeViewController.init();
     },
 
     hideAllViews: function()
     {
-        $('.page').css('display', 'none');
-        $('.page').css('pointer-events', 'none');
+        $('.view').css('display', 'none');
+        $('.view').css('pointer-events', 'none');
     }
 });
 
@@ -733,30 +709,30 @@ $.extend(NavigationController.prototype, {
     }
 });
 
-// Extends PageViewController base
+// Extends ViewControllerBase
 var IntroViewController = function(config)
 {
+    // call base class constructor
+    ViewControllerBase.call(this, config);
+
     // class level members
     this.stage;
     this.confettiController = {};
     this.timeline = {};
 
-    // cache DOM elements once
-    this.scaler = $(".scaler");
-    this.cup = $(".cup");
-
-    // call base class constructor
-    PageViewControllerBase.call(this, config);
+    // DOM elements
+    this.scaler = this.elem.find(".scaler");
+    this.cup = this.elem.find(".cup");
 };
-inheritsFrom(IntroViewController, PageViewControllerBase);
+inheritsFrom(IntroViewController, ViewControllerBase);
 
-
+// Intro View Implementation
 $.extend(IntroViewController.prototype, {
 
-	// overridden methods
+	// ViewControllerBase overridden methods
     setup: function()
     {
-        console.log("intro view setup")
+        ViewControllerBase.prototype.setup.call(this);
     	var scope = this;
 
         // load the assets
@@ -765,6 +741,27 @@ $.extend(IntroViewController.prototype, {
         this.loader.loadManifest(this.config.assets);
     },
 
+    transitionIn: function()
+    {
+        var scope = this;
+
+        ViewControllerBase.prototype.transitionIn.call(this);
+
+        this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
+        this.timeline.add(TweenMax.delayedCall(1, function() { scope.confettiController.initParticles(); } ));
+        this.timeline.add(TweenMax.delayedCall(3, function() { scope.navigateTo("team-vs-team")} ));
+    },
+
+    // clean up - remove the confetti
+    destroy: function()
+    {
+        console.log("destroy intro view");
+        this.stage.removeChild(this.confettiController.container);
+        this.confettiController = null;
+        this.hide();
+    },
+
+    // Event Handlers
     handleLoadComplete: function()
     {
         var scope = this;
@@ -792,24 +789,88 @@ $.extend(IntroViewController.prototype, {
         this.dispatchIsReady();
     },
 
+    handleResize: function(event)
+    {
+        var newHeight = getBrowserHeight();
+        var ratioH = newHeight / app.siteModel.properties.height;
+
+        var newWidth = getBrowserWidth();
+        var ratioW = newWidth / app.siteModel.properties.width;
+
+        var ratio = Math.min(Math.min(ratioH, ratioW), 1);
+        this.scaler.css("transform", "scale(" + ratio + ")");
+    }
+});
+
+// Extends ViewControllerBase
+var TeamVsTeamView = function(config)
+{
+    // call base class constructor
+    ViewControllerBase.call(this, config);
+
+    // class level members
+    this.timeline = {};
+
+    // DOM elements
+    this.scaler = this.elem.find(".scaler");
+    this.portlandWedge = this.elem.find("#portland-wedge");
+    this.dallasWedge = this.elem.find("#dallas-wedge");
+};
+inheritsFrom(TeamVsTeamView, ViewControllerBase);
+
+
+$.extend(TeamVsTeamView.prototype, {
+
+	// overridden methods
+    setup: function()
+    {
+        ViewControllerBase.prototype.setup.call(this);
+
+        // team-vs-team specific setup functionality
+    	var scope = this;
+
+        // load the assets
+        this.loader = new createjs.LoadQueue(true);
+        this.listenerRefs["loader"] = this.loader.addEventListener("complete", function() { scope.handleLoadComplete(); });
+        this.loader.loadManifest(this.config.assets);
+    },
+
+    handleLoadComplete: function()
+    {
+        console.log('team vs team: load complete');
+        var scope = this;
+
+        // main timeline
+        this.timeline = new TimelineMax({delay:1, onComplete:function() { scope.dispatchTransitionIn(); } });
+
+        // dom event handlers
+        $(window).bind('resize', function (event) { scope.handleResize(event); });
+        this.handleResize(null);
+
+        // page is ready
+        this.dispatchIsReady();
+    },
+
     transitionIn: function()
     {
         var scope = this;
+        this.show();
 
-        PageViewControllerBase.prototype.transitionIn.call(this);
+        this.timeline.to(this.portlandWedge, 1, { left:0, ease:Quad.easeIn });
+        this.timeline.to(this.dallasWedge, 1, { right:0, ease:Quad.easeIn }, "-=1");
+        // this.timeline.add(TweenMax.delayedCall(1, function() { scope.confettiController.initParticles(); } ));
+        // this.timeline.add(TweenMax.delayedCall(3, function() { scope.navigateTo("")} ));
 
-        this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
-        this.timeline.add(TweenMax.delayedCall(1, function() { scope.confettiController.initParticles(); } ));
     },
 
     transitionOut: function()
     {
-        PageViewControllerBase.prototype.transitionOut.call(this);
+        ViewControllerBase.prototype.transitionOut.call(this);
     },
 
     show: function()
     {
-        PageViewControllerBase.prototype.show.call(this);
+        ViewControllerBase.prototype.show.call(this);
     },
 
     handleResize: function(event)
@@ -820,7 +881,7 @@ $.extend(IntroViewController.prototype, {
         var newWidth = getBrowserWidth();
         var ratioW = newWidth / app.siteModel.properties.width;
 
-        var ratio = Math.min(Math.min(ratioH, ratioW), 1);
+        var ratio = Math.max(ratioH, ratioW);
         this.scaler.css("transform", "scale(" + ratio + ")");
     }
 });

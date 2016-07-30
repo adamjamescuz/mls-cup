@@ -160,8 +160,8 @@ module.exports = function( grunt )
   grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks("grunt-bower-install-simple");
 
-  grunt.registerTask( 'run', [ 'build', 'browserSync', 'watch' ] );
-  grunt.registerTask( 'build', [
+  grunt.registerTask( 'run', [ 'dev', 'browserSync', 'watch' ] );
+  grunt.registerTask( 'dev', [
     'clean', 'sass:build', 'copy:build_app_assets', 'copy:build_vendorjs', 'copy:copy_html', 'concat'
   ]);
 

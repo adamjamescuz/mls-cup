@@ -43,6 +43,9 @@ $.extend(ApplicationController.prototype, {
             case "team-vs-team":
                 viewController = new TeamVsTeamView(pageConfig);
                 break;
+            case "final-frame":
+                viewController = new FinalFrameView(pageConfig);
+                break;
             default:
                 console.error('unknown view in config');
             }
@@ -109,6 +112,9 @@ $.extend(ApplicationController.prototype, {
 
     handleTransitionIn: function()
     {
+        console.log("ApplicationController: handle transition in");
+
+        // clean up previous view, if any
         if (this.previousViewController !== null)
         {
             this.previousViewController.destroy();
@@ -120,6 +126,7 @@ $.extend(ApplicationController.prototype, {
 
     handleTransitionOut: function()
     {
+        console.log('ApplicationController: handle transition out');
         this.previousViewController = this.activeViewController;
         this.activeViewController = null;
         this.initView(this.nextViewAfterTranstion);

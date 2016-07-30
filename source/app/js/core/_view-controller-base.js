@@ -1,5 +1,5 @@
 // Base class for the view controllers
-// Indivudal view controllers extend this and override
+// Individual view controllers extend this and override
 // certain methods for their own functionality
 var ViewControllerBase = function(config)
 {
@@ -17,7 +17,7 @@ var ViewControllerBase = function(config)
     this.isReady = false;
 };
 
-
+// Implementation of base funtionality
 $.extend(ViewControllerBase.prototype, {
 
     init: function()
@@ -36,6 +36,24 @@ $.extend(ViewControllerBase.prototype, {
     {
         // override this in individual page controllers for any besoke setup e.g. loading in manifest etc
         console.log(this.config.name + ' : setup');
+        var scope = this;
+
+        // if we have to pre-load, load them, otherwise dispatch is ready
+        if (this.config.assets.length > 0)
+        {
+            this.loader = new createjs.LoadQueue(true);
+            this.listenerRefs["loader"] = this.loader.addEventListener("complete", function() { scope.handleLoadComplete(); });
+            this.loader.loadManifest(this.config.assets);
+        }
+        else {
+            this.handleLoadComplete();
+        }
+    },
+
+    // override this in individual views
+    handleLoadComplete: function()
+    {
+        this.dispatchIsReady();
     },
 
     show: function()
@@ -81,8 +99,8 @@ $.extend(ViewControllerBase.prototype, {
     transitionIn: function()
     {
         console.log(this.config.name + ' : transition in');
-        this.dispatchTransitionIn();
         this.show();
+        this.dispatchTransitionIn();
     },
 
     dispatchTransitionIn: function()

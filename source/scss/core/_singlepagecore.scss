@@ -1,13 +1,3 @@
-.fader {
-	position: absolute;
-	width:100%;
-	height:100%;
-	z-index: $high;
-	background-color: black;
-	pointer-events: none;
-	opacity: 0;
-    filter: alpha(opacity=0);
-}
 
 .overlay {
 	position: absolute;

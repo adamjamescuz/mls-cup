@@ -19,40 +19,9 @@ inheritsFrom(IntroViewController, ViewControllerBase);
 $.extend(IntroViewController.prototype, {
 
 	// ViewControllerBase overridden methods
-    setup: function()
-    {
-        ViewControllerBase.prototype.setup.call(this);
-    	var scope = this;
-
-        // load the assets
-        this.loader = new createjs.LoadQueue(true);
-        this.listenerRefs["loader"] = this.loader.addEventListener("complete", function() { scope.handleLoadComplete(); });
-        this.loader.loadManifest(this.config.assets);
-    },
-
-    transitionIn: function()
-    {
-        var scope = this;
-
-        ViewControllerBase.prototype.transitionIn.call(this);
-
-        this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
-        this.timeline.add(TweenMax.delayedCall(1, function() { scope.confettiController.initParticles(); } ));
-        this.timeline.add(TweenMax.delayedCall(3, function() { scope.navigateTo("team-vs-team")} ));
-    },
-
-    // clean up - remove the confetti
-    destroy: function()
-    {
-        console.log("destroy intro view");
-        this.stage.removeChild(this.confettiController.container);
-        this.confettiController = null;
-        this.hide();
-    },
-
-    // Event Handlers
     handleLoadComplete: function()
     {
+        console.log('intro view: load complete');
         var scope = this;
 
         // make a createJS stage for the confetti
@@ -78,6 +47,28 @@ $.extend(IntroViewController.prototype, {
         this.dispatchIsReady();
     },
 
+    transitionIn: function()
+    {
+        console.log("Intro view: transitionIn");
+        var scope = this;
+
+        ViewControllerBase.prototype.transitionIn.call(this);
+
+        this.timeline.to(this.cup, 1, { bottom:0, ease:Power2.easeOut });
+        this.timeline.add(function() { scope.confettiController.initParticles(); }, "-=1");
+        this.timeline.add(function() { scope.navigateTo("team-vs-team") }, "+=3");
+    },
+
+    // clean up - remove the confetti
+    destroy: function()
+    {
+        console.log("destroy intro view");
+        this.stage.removeChild(this.confettiController.container);
+        this.confettiController = null;
+        this.hide();
+    },
+
+    // Event Handlers
     handleResize: function(event)
     {
         var newHeight = getBrowserHeight();

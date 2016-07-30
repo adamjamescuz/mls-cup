@@ -17,15 +17,15 @@
 		-webkit-transform: scale(1,1);
 		transform: scale(1,1);
         transform-origin:center bottom;
-    }
 
-    .cup {
-        position: absolute;
-        left:50%;
-        bottom:-986px;
-        margin: 0 -297px;
-        width:593px;
-        height:986px;
-	    background: url("images/intro/cup.png") no-repeat;
+        .cup {
+            position: absolute;
+            left:50%;
+            bottom:-986px;
+            margin: 0 -297px;
+            width:593px;
+            height:986px;
+    	    background: url("images/intro/cup.png") no-repeat;
+        }
     }
 }

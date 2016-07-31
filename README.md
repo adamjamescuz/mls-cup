@@ -32,7 +32,7 @@ grunt deploy
 All the source code contains lots of comments - so here is just a brief overview:
 
 Although I see the benefit of front end frameworks e.g. Backbone, Angular etc, for this I have used my own bespoke lightweight single page
-app framework as it contains just three views and I can achieve everything I need to whilst still having enough scalability should I extend the banner later. It uses SCSS for the CSS and has a Grunt build process (described above) for buiding the develop and distribution versions.
+app framework as it contains just three views and I can achieve everything I need to whilst still having enough scalability should I extend the banner later. It uses SCSS for the CSS and has a Grunt build process (described above) for buiding the develop and distribution versions. Lastly, I have only included the OTF formats for the DIN fonts which are used in the design.
 
 #### source/app/js/__main.js:
 

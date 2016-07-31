@@ -38,6 +38,12 @@ $.extend(TeamVsTeamView.prototype, {
         this.inTimeline = new TimelineMax({ delay:1 });
         this.outTimeline = new TimelineMax({ delay:1 });
 
+        // set DOM preloaded images
+        var dallasWedgeSrc = _.findWhere(this.config.assets, {id: "dallas-wedge"}).src;
+        var portlandWedgeSrc = _.findWhere(this.config.assets, {id: "portland-wedge"}).src;
+        this.dallasWedge.css("background-image", "url(" + dallasWedgeSrc + ")");
+        this.portlandWedge.css("background-image", "url(" + portlandWedgeSrc + ")");
+
         // DOM event handlers
         $(window).bind('resize', function (event) { scope.handleResize(event); });
         this.handleResize(null);

@@ -43,7 +43,8 @@ $.extend(IntroViewController.prototype, {
         this.stage.addChild(this.confettiController.container);
 
         // set DOM preloaded images
-        this.cup.css("background-image", "url(" + this.config.assets[6].src + ")");
+        var cupSrc = _.findWhere(this.config.assets, {id: "cup"}).src;
+        this.cup.css("background-image", "url(" + cupSrc + ")");
 
         // dom event handlers
         $(window).bind('resize', function (event) { scope.handleResize(event); });

@@ -10,7 +10,7 @@ var IntroViewController = function(config)
     this.timeline = {};
 
     // DOM elements
-    this.scaler = this.elem.find(".scaler");
+    this.scaler = this.elem.find(".scale-container");
     this.cup = this.elem.find(".cup");
 
     // properties
@@ -36,11 +36,14 @@ $.extend(IntroViewController.prototype, {
 		createjs.Touch.enable(this.stage);
 
         // main timeline
-        this.timeline = new TimelineMax({ onComplete:function() { } });
+        this.timeline = new TimelineMax({ delay:1 });
 
         // create the confetti
         this.confettiController = new ConfettiController(this.loader, "confetti-", app.siteModel.properties.width, app.siteModel.properties.height, {x:0, y:0}, this.confettiParticles, 1);
         this.stage.addChild(this.confettiController.container);
+
+        // set DOM preloaded images
+        this.cup.css("background-image", "url(" + this.config.assets[6].src + ")");
 
         // dom event handlers
         $(window).bind('resize', function (event) { scope.handleResize(event); });
@@ -73,7 +76,7 @@ $.extend(IntroViewController.prototype, {
         this.timeline = null;
         this.stage.removeChild(this.confettiController.container);
         this.confettiController = null;
-        this.hide();
+        this.elem.remove();
     },
 
     // Event Handlers

@@ -10,7 +10,7 @@ var TeamVsTeamView = function(config)
 
     // DOM elements
     this.fader = this.elem.find(".fader");
-    this.scaler = this.elem.find(".scaler");
+    this.scaler = this.elem.find(".scale-container");
     this.portlandWedge = this.elem.find("#portland-wedge");
     this.dallasWedge = this.elem.find("#dallas-wedge");
 
@@ -35,8 +35,8 @@ $.extend(TeamVsTeamView.prototype, {
         var scope = this;
 
         // timelines
-        this.inTimeline = new TimelineMax({delay:1, onComplete:function() { }});
-        this.outTimeline = new TimelineMax({delay:1, onComplete:function() { }});
+        this.inTimeline = new TimelineMax({ delay:1 });
+        this.outTimeline = new TimelineMax({ delay:1 });
 
         // DOM event handlers
         $(window).bind('resize', function (event) { scope.handleResize(event); });
@@ -107,7 +107,7 @@ $.extend(TeamVsTeamView.prototype, {
         this.inTimeline = null;
         this.outTimeline.stop();
         this.outTimeline = null;
-        this.hide();
+        this.elem.remove();
     },
 
     // Event Handlers

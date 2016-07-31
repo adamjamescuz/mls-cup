@@ -10,7 +10,7 @@ var FinalFrameView = function(config)
 
     // DOM elements
     this.fader = this.elem.find(".fader");
-    this.infoScaler = this.elem.find(".info-scaler");
+    this.infoScaler = this.elem.find(".info-scale-container ");
     this.hotspotWrapper = this.elem.find(".hotspot-wrapper");
     this.mlsCup = this.elem.find("#mls-cup");
     this.hand = this.elem.find(".hand");
@@ -93,6 +93,6 @@ $.extend(FinalFrameView.prototype, {
         this.inTimeline.stop();
         this.inTimeline = null;
         this.videoController.destroy();
-        this.hide();
+        this.elem.remove();
     }
 });

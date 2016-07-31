@@ -6,7 +6,7 @@
         background: none;
     }
 
-    .scaler {
+    .scale-container {
         position: absolute;
 		z-index: 1;
 		bottom:0;
@@ -25,7 +25,7 @@
             margin: 0 -341px;
             width:681px;
             height:988px;
-    	    background: url("images/intro/cup.png") no-repeat;
+    	    // background: url("images/intro/cup.png") no-repeat;
         }
     }
 }

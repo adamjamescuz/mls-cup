@@ -5,17 +5,14 @@ Email: cousins.aj@gmail.com
 Best viewed in Chrome or Safari. Desktop format version has resizing / anchoring of elements to scale to different screen sizes.
 I have implemented the main close button - if you click this it will completely destroy the view, so you will need to refresh to view the ad again. All DIN based text is HTML text rather than PNG or SVG graphics. Lastly, the supplied video does not seem to be related to the MLS Cup creative, but have used it anyway. It was a very large video, so have compressed it to .H264 MP4 format.
 
-### TO VIEW ON THE WEB:
+### TO VIEW PRE-BUILT DISTRIBUTION VERSION ON THE WEB:
 1. Navigate your browser to: http://adamcousins.com/demos/undertone/mls-cup/
 
-### TO VIEW THE PRE-BUILT DISTRIBUTION VERSION LOCALLY:
-(Assuming you have a localhost environment setup e.g. MAMP)
-1. Direct your browser to localhost/{project foldder}/deploy/
-
-The use of a localhost environment is required as site uses createJS.
 
 ### TO BUILD DEVELOPMENT VERSION:
-Ensure Grunt is installed. Open terminal, and then:
+1. Ensure Grunt is installed
+2. Open terminal, and then:
+
 ```sh
 cd {project folder}
 npm install
@@ -25,7 +22,8 @@ grunt dev
 BrowserSync is used, so a new browser window should open automatically. If not, direct your browser to http://localhost:3000/
 
 ### TO BUILD DISTRIBUTION VERSION
-Lines 1 - 3 as above, and then:
+1. Lines 1 - 3 as above, and then:
+
 ```sh
 grunt deploy
 ```

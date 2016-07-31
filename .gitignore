@@ -1,5 +1,6 @@
 design-assets
 develop
+deploy
 bower_components
 .sass-cache
 node_modules

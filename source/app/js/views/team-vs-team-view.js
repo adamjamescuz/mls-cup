@@ -89,9 +89,9 @@ $.extend(TeamVsTeamView.prototype, {
         this.outTimeline.to(this.toGlory, 0.3, { opacity:0, ease:Power2.easeOut });
         this.outTimeline.to(this.game, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
         this.outTimeline.to(this.one, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
-        this.outTimeline.to(this.portlandWedge, 1, { left:-1498, ease:Quad.easeOut });
-        this.outTimeline.to(this.dallasWedge, 1, { right:-1557, ease:Quad.easeOut }, "-=1");
-        this.outTimeline.to(this.fader, 1, { opacity:0, ease:Quad.easeOut }, "-=1");
+        this.outTimeline.to(this.portlandWedge, 1.5, { left:-1498, ease:Quad.easeOut });
+        this.outTimeline.to(this.dallasWedge, 1.5, { right:-1557, ease:Quad.easeOut }, "-=1.5");
+        this.outTimeline.to(this.fader, 1.5, { opacity:0, ease:Quad.easeOut }, "-=1.5");
         this.outTimeline.add(function(){ scope.dispatchTransitionOutComplete(); });
     },
 

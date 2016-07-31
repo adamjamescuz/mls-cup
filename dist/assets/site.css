@@ -5814,6 +5814,11 @@ button.close {
   src: url("../assets/fonts/DIN Next/DINNextLTPro-Heavy.otf") format("otf");
   font-weight: normal;
   font-style: normal; }
+@font-face {
+  font-family: 'DINNextLTPro-Medium';
+  src: url("../assets/fonts/DIN Next/DINNextLTPro-Medium.otf") format("otf");
+  font-weight: normal;
+  font-style: normal; }
 html,
 body {
   min-width: 280px;
@@ -5897,11 +5902,11 @@ a, a:hover, a:visited, a:active, a:focus {
   transform-origin: center bottom; }
   #intro-view .scaler .cup {
     position: absolute;
-    left: 50%;
-    bottom: -986px;
-    margin: 0 -297px;
-    width: 593px;
-    height: 986px;
+    left: 54%;
+    bottom: -987px;
+    margin: 0 -341px;
+    width: 681px;
+    height: 988px;
     background: url("images/intro/cup.png") no-repeat; }
 
 #team-vs-team-view .fader {
@@ -5987,6 +5992,57 @@ a, a:hover, a:visited, a:active, a:focus {
   left: 0;
   width: 100%;
   height: 100%; }
+  #final-frame-view .fader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    background-color: black;
+    pointer-events: none;
+    opacity: 0;
+    filter: alpha(opacity=0); }
+  #final-frame-view .video-container {
+    display: none;
+    position: absolute;
+    z-index: 5;
+    height: 1050px;
+    width: 2000px;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+    left: 50%;
+    top: 50%;
+    margin: -525px -1000px;
+    transform-origin: center center; }
+    #final-frame-view .video-container .video-button {
+      position: absolute;
+      cursor: pointer;
+      z-index: 1; }
+    #final-frame-view .video-container #play-btn {
+      width: 160px;
+      height: 160px;
+      left: 50%;
+      top: 50%;
+      margin: -80px -80px; }
+    #final-frame-view .video-container #pause-btn {
+      background: none;
+      width: 1190px;
+      height: 668px;
+      left: 50%;
+      top: 50%;
+      margin: -334px -595px; }
+    #final-frame-view .video-container #close-btn {
+      width: 109px;
+      height: 109px;
+      top: 135px;
+      right: 350px; }
+    #final-frame-view .video-container #tv-spot {
+      position: absolute;
+      z-index: 0;
+      width: 1190px;
+      height: 668px;
+      left: 50%;
+      top: 50%;
+      margin: -334px -595px; }
   #final-frame-view #mls-cup {
     position: absolute;
     z-index: 2;
@@ -6012,11 +6068,60 @@ a, a:hover, a:visited, a:active, a:focus {
       background-color: #ffffff;
       height: 80px;
       padding: 0px 76px 0px 8px;
-      margin-bottom: 10px; }
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      font-family: "DINNextLTPro-Heavy";
+      font-size: 82.57px;
+      color: #000000; }
       #final-frame-view .info-scaler .vs-copy p {
-        margin-top: -10px;
+        margin-top: -10px; }
+    #final-frame-view .info-scaler .date-wrapper {
+      margin-top: 44px; }
+      #final-frame-view .info-scaler .date-wrapper div {
+        display: inline-block;
+        height: 33px;
+        font-size: 47px; }
+        #final-frame-view .info-scaler .date-wrapper div p {
+          margin: -10px 0 0 0; }
+      #final-frame-view .info-scaler .date-wrapper .date-part {
+        font-family: "DINNextLTPro-Medium";
+        border-right: 7px solid #d0ad68;
+        padding-right: 22px; }
+      #final-frame-view .info-scaler .date-wrapper .time-part {
         font-family: "DINNextLTPro-Heavy";
-        font-size: 82.57px;
-        color: #000000; }
+        padding-left: 22px; }
+    #final-frame-view .info-scaler img.live-on-logo {
+      margin-top: 37px;
+      width: 534px; }
+  #final-frame-view .hotspot-wrapper {
+    position: absolute;
+    z-index: 3;
+    right: 150px;
+    top: 75px;
+    height: 1050px;
+    width: 2000px;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+    transform-origin: top right;
+    padding: 30px 30px 0 0px;
+    text-align: center; }
+    #final-frame-view .hotspot-wrapper #hotspot-button {
+      position: absolute;
+      z-index: 0;
+      right: 0;
+      top: 0;
+      cursor: pointer; }
+      #final-frame-view .hotspot-wrapper #hotspot-button img {
+        margin-bottom: 10px; }
+      #final-frame-view .hotspot-wrapper #hotspot-button p {
+        font-family: "DINNextLTPro-Heavy";
+        font-size: 30px;
+        text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.7); }
+    #final-frame-view .hotspot-wrapper .hand {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      top: 52px;
+      right: 53px; }
 
 /*# sourceMappingURL=site.css.map */

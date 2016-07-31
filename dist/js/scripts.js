@@ -400,6 +400,105 @@ $.extend(Loader.prototype, {
     }
 });
 
+var VideoController = function(elem, videoID)
+{
+    this.elem = $(elem);
+    this.videoID = videoID
+    this.video;
+    this.playButton;
+    this.pauseButton;
+    this.close;
+    this.playingState;
+};
+
+VideoController.States = {
+    PAUSED: 0,
+    PLAYING: 1
+}
+
+$.extend(VideoController.prototype, {
+
+    init: function()
+    {
+        var scope = this;
+
+        this.video = this.elem.find(this.videoID).get(0);
+        this.video.onended = function() { scope.handleVideoEnd(); }
+
+        this.playButton = this.elem.find("#play-btn");
+        this.pauseButton = this.elem.find("#pause-btn");
+        this.close = this.elem.find("#close-btn");
+
+        this.playButton.bind("pointerdown", function() { scope.handlePlayPauseClicked(); } );
+        this.pauseButton.bind("pointerdown", function() { scope.handlePlayPauseClicked(); } );
+        this.close.bind("pointerdown", function() { scope.handleCloseClicked(); } );
+
+        this.pause();
+    },
+
+    handleCloseClicked: function()
+    {
+        this.pause();
+        this.hide();
+        var event = new CustomEvent('Close', {'detail': {}});
+        this.elem[0].dispatchEvent(event);
+    },
+
+    handleVideoEnd: function()
+    {
+        console.log("video ended");
+        this.pause();
+        this.video.currentTime = 0;
+    },
+
+    handlePlayPauseClicked:function(elem)
+    {
+        switch (this.state)
+        {
+        case VideoController.States.PAUSED:
+            this.play();
+            break;
+        case VideoController.States.PLAYING:
+            this.pause();
+            break;
+        }
+    },
+
+    play:function()
+    {
+        this.state = VideoController.States.PLAYING;
+        this.video.play();
+        this.playButton.css("display", "none");
+        this.pauseButton.css("display", "block");
+    },
+
+    pause:function()
+    {
+        this.state = VideoController.States.PAUSED;
+        this.video.pause();
+        this.playButton.css("display", "block");
+        this.pauseButton.css("display", "none");
+    },
+
+    show: function(d)
+    {
+        this.elem.css('display', 'block');
+        TweenMax.to(this.elem[0], 0.4, { opacity:1, ease:Back.easeOut, onComplete:function() {} });
+    },
+
+    hide: function(d)
+    {
+        var scope = this;
+        TweenMax.to(this.elem[0], 0.4, { opacity:0, ease:Power2.easeOut, onComplete:function() {
+            scope.elem.css('display', 'none');
+        }});
+    },
+
+    destroy: function()
+    {
+    }
+});
+
 // Base class for the view controllers
 // Individual view controllers extend this and override
 // certain methods for their own functionality
@@ -714,11 +813,17 @@ var FinalFrameView = function(config)
     ViewControllerBase.call(this, config);
 
     // class level members
-    this.timeline = {};
+    this.inTimeline = {};
+    this.videoController = {};
 
     // DOM elements
+    this.fader = this.elem.find(".fader");
     this.infoScaler = this.elem.find(".info-scaler");
+    this.hotspotWrapper = this.elem.find(".hotspot-wrapper");
     this.mlsCup = this.elem.find("#mls-cup");
+    this.hand = this.elem.find(".hand");
+    this.videoContainer = this.elem.find(".video-container");
+    this.hotspotButton = this.elem.find("#hotspot-button");
 };
 inheritsFrom(FinalFrameView, ViewControllerBase);
 
@@ -731,9 +836,17 @@ $.extend(FinalFrameView.prototype, {
         console.log('FinalFrameView handleLoadComplete');
         var scope = this;
 
+        // timelines
+        this.inTimeline = new TimelineMax({ delay:1 });
+        this.videoController = new VideoController(this.videoContainer, "#tv-spot");
+        this.videoController.elem[0].addEventListener('Close', function (e) { scope.handleVideoClosed(e.detail); }, false);
+        this.videoController.init();
+
         // dom event handlers
         $(window).bind('resize', function (event) { scope.handleResize(event); });
         this.handleResize(null);
+
+        this.hotspotButton.bind("pointerdown", function() { scope.handleVideoHotspotClicked(); } );
 
         // page is ready
         this.dispatchIsReady();
@@ -744,21 +857,42 @@ $.extend(FinalFrameView.prototype, {
         console.log("FinalFrameView transition in");
         var scope = this;
 
-        ViewControllerBase.prototype.transitionIn.call(this);
+        this.show();
+        this.dispatchTransitionIn();
+
+        this.inTimeline.from(this.hand, 0.6, { opacity:0, x:75, y:75, ease:Power2.easeOut });
+        this.inTimeline.set(this.hand,  { opacity:0, x:75, y:75 }, "+=0.5");
+        this.inTimeline.to(this.hand, 0.6, { opacity:1, x:0, y:0, ease:Power2.easeOut });
+        this.inTimeline.set(this.hand,  { opacity:0, x:75, y:75 }, "+=0.5");
+        this.inTimeline.to(this.hand, 0.6, { opacity:1, x:0, y:0, ease:Power2.easeOut });
+        this.inTimeline.set(this.hand,  { opacity:0, x:75, y:75 }, "+=0.5");
+        this.inTimeline.to(this.hand, 0.6, { opacity:1, x:0, y:0, ease:Power2.easeOut });
     },
 
     // Event handlers
+    handleVideoHotspotClicked: function()
+    {
+        TweenMax.to(this.fader, 0.8, {opacity:0.8, ease:Quad.easeOut });
+        this.videoController.show();
+    },
+
+    handleVideoClosed: function()
+    {
+        TweenMax.to(this.fader, 0.4, {opacity:0, ease:Quad.easeOut });
+    },
+
     handleResize: function(event)
     {
         var newHeight = getBrowserHeight();
         var ratioH = newHeight / app.siteModel.properties.height;
-
         var newWidth = getBrowserWidth();
         var ratioW = newWidth / app.siteModel.properties.width;
-
         var ratio = Math.min(Math.min(ratioH, ratioW), 1);
+
         this.mlsCup.css("transform", "scale(" + ratio + ")");
         this.infoScaler.css("transform", "scale(" + ratio + ")");
+        this.hotspotWrapper.css("transform", "scale(" + ratio + ")");
+        this.videoContainer.css("transform", "scale(" + ratio + ")");
     }
 });
 
@@ -943,9 +1077,9 @@ $.extend(TeamVsTeamView.prototype, {
         this.outTimeline.to(this.toGlory, 0.3, { opacity:0, ease:Power2.easeOut });
         this.outTimeline.to(this.game, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
         this.outTimeline.to(this.one, 0.3, { opacity:0, ease:Power2.easeOut }, "-=0.24");
-        this.outTimeline.to(this.portlandWedge, 1, { left:-1498, ease:Quad.easeOut });
-        this.outTimeline.to(this.dallasWedge, 1, { right:-1557, ease:Quad.easeOut }, "-=1");
-        this.outTimeline.to(this.fader, 1, { opacity:0, ease:Quad.easeOut }, "-=1");
+        this.outTimeline.to(this.portlandWedge, 1.5, { left:-1498, ease:Quad.easeOut });
+        this.outTimeline.to(this.dallasWedge, 1.5, { right:-1557, ease:Quad.easeOut }, "-=1.5");
+        this.outTimeline.to(this.fader, 1.5, { opacity:0, ease:Quad.easeOut }, "-=1.5");
         this.outTimeline.add(function(){ scope.dispatchTransitionOutComplete(); });
     },
 

@@ -11,6 +11,71 @@
 	width:100%;
 	height:100%;
 
+    .fader {
+    	position: absolute;
+    	width:100%;
+    	height:100%;
+    	z-index: 4;
+    	background-color: black;
+    	pointer-events: none;
+    	opacity: 0;
+        filter: alpha(opacity=0);
+    }
+
+    .video-container {
+        display:none;
+        position: absolute;
+        z-index: 5;
+        height: 1050px;
+		width:2000px;
+		-webkit-transform: scale(1,1);
+		transform: scale(1,1);
+        left:50%;
+        top:50%;
+        margin: -525px -1000px;
+        transform-origin:center center;
+
+        .video-button {
+            position: absolute;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        #play-btn {
+            width: 160px;
+            height: 160px;
+            left:50%;
+            top:50%;
+            margin: -80px -80px
+        }
+
+        #pause-btn {
+            background: none;
+            width:1190px;
+            height:668px;
+            left:50%;
+            top:50%;
+            margin: -334px -595px;
+        }
+
+        #close-btn {
+            width:109px;
+            height:109px;
+            top:135px;
+            right:350px;
+        }
+
+        #tv-spot {
+            position: absolute;
+            z-index: 0;
+            width:1190px;
+            height:668px;
+            left:50%;
+            top:50%;
+            margin: -334px -595px;
+        }
+    }
+
     #mls-cup {
         position: absolute;
         z-index: 2;
@@ -40,13 +105,83 @@
             height:80px;
             padding: 0px 76px 0px 8px;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            font-family: "DINNextLTPro-Heavy";
+            font-size: 82.57px;
+            color:#000000;
 
             p {
                 margin-top:-10px;
-                font-family: "DINNextLTPro-Heavy";
-                font-size: 82.57px;
-                color:#000000;
             }
+        }
+
+        .date-wrapper {
+            margin-top:44px;
+
+            div {
+                display: inline-block;
+                height: 33px;
+                font-size: 47px;
+
+                p {
+                    margin:-10px 0 0 0;
+                }
+            }
+
+            .date-part {
+                font-family: "DINNextLTPro-Medium";
+                border-right: 7px solid #d0ad68;
+                padding-right: 22px;
+            }
+
+            .time-part {
+                font-family: "DINNextLTPro-Heavy";
+                padding-left:22px;
+            }
+        }
+
+        img.live-on-logo {
+            margin-top: 37px;
+            width:534px;
+        }
+    }
+
+    .hotspot-wrapper {
+        position: absolute;
+		z-index: 3;
+		right:150px;
+        top:75px;
+		height: 1050px;
+		width:2000px;
+		-webkit-transform: scale(1,1);
+		transform: scale(1,1);
+        transform-origin:top right;
+        padding:30px 30px 0 0px;
+        text-align: center;
+
+        #hotspot-button {
+            position: absolute;
+            z-index: 0;
+            right:0;
+            top:0;
+            cursor: pointer;
+
+            img {
+                margin-bottom: 10px;
+            }
+            p {
+                font-family: "DINNextLTPro-Heavy";
+                font-size: 30px;
+                text-shadow: 2px 2px 3px rgba(0,0,0,0.7);
+            }
+        }
+
+        .hand {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            top:52px;
+            right:53px;
         }
     }
 }

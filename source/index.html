@@ -58,11 +58,39 @@
 
             <!-- Final Frame view -->
             <div id="final-frame-view" class="view">
+                <div id="fader" class="fader"></div>
+
+                <div class="video-container">
+                    <img src="assets/images/final-frame/close-button.png" class="video-button" id="close-btn">
+                    <img src="assets/images/final-frame/play-button.png" class="video-button" id="play-btn">
+                    <div class="video-button" id="pause-btn"></div>
+
+                    <video id="tv-spot" width="1190" height="668">
+                        <source src="assets/video/tv-spot.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
                 <img src="assets/images/final-frame/mls-cup.svg" id="mls-cup">
                 <div class="info-scaler">
                     <div class="vs-copy"><p>PORTLAND TIMBERS</p></div><br>
                     <div class="vs-copy"><p>VS</p></div><br>
                     <div class="vs-copy"><p>FC DALLAS</p></div><br>
+
+                    <div class="date-wrapper">
+                        <div class="date-part"><p>December 6<sup>th</sup></p></div>
+                        <div class="time-part"><p>3PM ET</p></div>
+                    </div>
+
+                    <img src="assets/images/final-frame/live-on-logo.svg" class="live-on-logo">
+                </div>
+
+                <div class="hotspot-wrapper">
+                    <div id="hotspot-button">
+                        <img src="assets/images/final-frame/hotspot.png">
+                        <p>WATCH TV SPOT</p>
+                    </div>
+                    <img src="assets/images/final-frame/hand.png" class="hand">
                 </div>
             </div>
         </div>

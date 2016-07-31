@@ -94,5 +94,7 @@ $.extend(VideoController.prototype, {
 
     destroy: function()
     {
+        this.pause();
+        this.hide();
     }
 });

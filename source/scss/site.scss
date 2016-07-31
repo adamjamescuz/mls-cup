@@ -11,15 +11,9 @@
 
 // core css for single page app framework
 @import "core/singlepagecore";
-@import "core/navigation";
 @import "core/loader";
 
-// re-usable generic components
-@import "modal";
-@import "social";
-@import "media-queries";
-
-// pages
+// views
 @import "views/intro";
 @import "views/team-vs-team";
 @import "views/final-frame";

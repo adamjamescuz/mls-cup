@@ -6,6 +6,7 @@ $(document).ready(function () {
   // defines the site propeties and views
   var siteModel = {
     properties: {
+        siteContainerID:"#root-container",
         width: 2000,
 		height: 1050,
 		fps: 60
@@ -50,7 +51,7 @@ $(document).ready(function () {
     viewsRequiredToRun:[
         "intro","team-vs-team", "final-frame"
     ],
-    startPage: "final-frame",
+    startPage: "intro",
     loader:"#loader"
   };
 

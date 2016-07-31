@@ -85,5 +85,14 @@ $.extend(FinalFrameView.prototype, {
         this.infoScaler.css("transform", "scale(" + ratio + ")");
         this.hotspotWrapper.css("transform", "scale(" + ratio + ")");
         this.videoContainer.css("transform", "scale(" + ratio + ")");
+    },
+
+    destroy: function()
+    {
+        console.log("destroy final frame view");
+        this.inTimeline.stop();
+        this.inTimeline = null;
+        this.videoController.destroy();
+        this.hide();
     }
 });

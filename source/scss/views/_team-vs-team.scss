@@ -67,6 +67,7 @@
 
         .team-logo {
             position: absolute;
+            z-index: 3;
             width:320px;
             transform-origin:center center;
             top:50%;

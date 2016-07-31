@@ -100,6 +100,17 @@ $.extend(TeamVsTeamView.prototype, {
         ViewControllerBase.prototype.show.call(this);
     },
 
+    destroy: function()
+    {
+        console.log("destroy team vs team view");
+        this.inTimeline.stop();
+        this.inTimeline = null;
+        this.outTimeline.stop();
+        this.outTimeline = null;
+        this.hide();
+    },
+
+    // Event Handlers
     handleResize: function(event)
     {
         var newHeight = getBrowserHeight();

@@ -69,6 +69,8 @@ $.extend(IntroViewController.prototype, {
     destroy: function()
     {
         console.log("destroy intro view");
+        this.timeline.stop();
+        this.timeline = null;
         this.stage.removeChild(this.confettiController.container);
         this.confettiController = null;
         this.hide();

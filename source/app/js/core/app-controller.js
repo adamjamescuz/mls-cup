@@ -7,8 +7,10 @@
 var ApplicationController = function(siteModel)
 {
     this.siteModel = siteModel;
+    this.rootElem = siteModel.properties.siteContainerID;
     this.activeViewController = null;
     this.previousViewController = null;
+    this.header = {};
     this.views = {};
     this.viewsReadyToRun = [];
     this.loader = {};
@@ -23,6 +25,10 @@ $.extend(ApplicationController.prototype, {
     {
         this.loader = new Loader("#loader-container");
         this.loader.init();
+
+        this.header = new Header("#main-header");
+        this.header.elem[0].addEventListener('Close', function (e) { scope.handleMainClosePressed(e.detail); }, false);
+        this.header.init();
 
         // show the loader as we are initialising the app
         this.showLoader();
@@ -72,7 +78,7 @@ $.extend(ApplicationController.prototype, {
         }
     },
 
-    // page event handlers
+    // View event handlers
     showLoader: function()
     {
         this.loader.show();
@@ -139,7 +145,12 @@ $.extend(ApplicationController.prototype, {
         this.initView(this.nextViewAfterTranstion);
     },
 
-    // application controller implementation
+    handleMainClosePressed: function()
+    {
+        this.activeViewController.destroy();
+    },
+
+    // Implementation
     start: function()
     {
         console.log("ApplicationController: start");
@@ -164,8 +175,6 @@ $.extend(ApplicationController.prototype, {
     initView: function(view)
     {
         console.log('ApplicationController: init view with name: ' + view);
-        //this.hideAllViews();
-        //this.showLoader();
 
         this.activeViewController = this.views[view];
         this.activeViewController.init();

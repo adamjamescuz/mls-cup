@@ -12,7 +12,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	background: url("../assets/images/PGX-Desktop.jpg") no-repeat;
+	background: url("../assets/images/global/pgx-desktop.jpg") no-repeat;
 	background-position: top center;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -20,12 +20,33 @@
 	background-size: cover;
 	width:100%;
 	height:100%;
-}
 
-.view {
-	position: absolute;
-	width:100%;
-	height: 100%;
-	z-index: $bottom;
-	display: none;
+	.view {
+		position: absolute;
+		width:100%;
+		height: 100%;
+		z-index: $bottom;
+		display: none;
+	}
+
+	.header {
+		position: absolute;
+		z-index: $top;
+		right:0;
+        top:0;
+		height: 1050px;
+		width:2000px;
+		-webkit-transform: scale(1,1);
+		transform: scale(1,1);
+        transform-origin:top right;
+		pointer-events: none;
+
+		#main-close-btn {
+			position: absolute;
+			right:6px;
+			top:6px;
+			cursor: pointer;
+			pointer-events: auto;
+		}
+	}
 }

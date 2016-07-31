@@ -22,7 +22,12 @@
     </head>
     <body touch-action="none">
 
-        <div class="desktop-wrapper">
+        <div class="desktop-wrapper" id="root-container">
+
+            <!-- Header with main close button -->
+            <div class="header" id="main-header">
+                <img src="assets/images/global/close-btn.png" id="main-close-btn">
+            </div>
 
             <!-- Loader Overlay -->
             <div id="loader-container" class="overlay fade-off">
@@ -31,7 +36,7 @@
 
             <!-- Intro Cup view -->
             <div id="intro-view" class="view">
-                <div class="scaler">
+                <div class="scale-container">
                     <div class="cup"></div>
                 </div>
                 <canvas id="canvas" width="2000" height="1050" style="background:none"></canvas>
@@ -40,7 +45,7 @@
             <!-- One Game view -->
             <div id="team-vs-team-view" class="view">
                 <div id="fader" class="fader"></div>
-                <div class="scaler">
+                <div class="scale-container">
                     <div id="one-game-copy">
                         <h1 class="fade-off">ONE</h1>
                         <h2 class="fade-off">GAME</h2>
@@ -71,7 +76,7 @@
                 </div>
 
                 <img src="assets/images/final-frame/mls-cup.svg" id="mls-cup">
-                <div class="info-scaler">
+                <div class="info-scale-container">
                     <div class="vs-copy"><p>PORTLAND TIMBERS</p></div><br>
                     <div class="vs-copy"><p>VS</p></div><br>
                     <div class="vs-copy"><p>FC DALLAS</p></div><br>

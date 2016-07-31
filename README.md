@@ -3,7 +3,7 @@ Email: cousins.aj@gmail.com
 
 ### NOTES:
 Best viewed in Chrome or Safari. Desktop format version has resizing / anchoring of elements to scale to different screen sizes.
-I have implemented the main close button - if you click this it will completely destroy the view, so you will need to refresh to view the ad again. All DIN based text is HTML text rather than PNG or SVG graphics.
+I have implemented the main close button - if you click this it will completely destroy the view, so you will need to refresh to view the ad again. All DIN based text is HTML text rather than PNG or SVG graphics. Lastly, the supplied video does not seem to be related to the MLS Cup creative, but have used it anyway. It was a very large video, so have compressed it to .H264 MP4 format.
 
 ### TO VIEW ON THE WEB:
 1. Navigate your browser to: http://adamcousins.com/demos/undertone/mls-cup/

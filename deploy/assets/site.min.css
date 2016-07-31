@@ -5850,7 +5850,7 @@ a, a:hover, a:visited, a:active, a:focus {
   position: absolute;
   top: 0;
   left: 0;
-  background: url("../assets/images/PGX-Desktop.jpg") no-repeat;
+  background: url("../assets/images/global/pgx-desktop.jpg") no-repeat;
   background-position: top center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -5858,13 +5858,29 @@ a, a:hover, a:visited, a:active, a:focus {
   background-size: cover;
   width: 100%;
   height: 100%; }
-
-.view {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  display: none; }
+  .desktop-wrapper .view {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: none; }
+  .desktop-wrapper .header {
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    top: 0;
+    height: 1050px;
+    width: 2000px;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+    transform-origin: top right;
+    pointer-events: none; }
+    .desktop-wrapper .header #main-close-btn {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      cursor: pointer;
+      pointer-events: auto; }
 
 #loader-container {
   text-align: center;
@@ -5889,7 +5905,7 @@ a, a:hover, a:visited, a:active, a:focus {
   width: 100%;
   height: 100%;
   background: none; }
-#intro-view .scaler {
+#intro-view .scale-container {
   position: absolute;
   z-index: 1;
   bottom: 0;
@@ -5900,14 +5916,13 @@ a, a:hover, a:visited, a:active, a:focus {
   -webkit-transform: scale(1, 1);
   transform: scale(1, 1);
   transform-origin: center bottom; }
-  #intro-view .scaler .cup {
+  #intro-view .scale-container .cup {
     position: absolute;
     left: 54%;
     bottom: -987px;
     margin: 0 -341px;
     width: 681px;
-    height: 988px;
-    background: url("images/intro/cup.png") no-repeat; }
+    height: 988px; }
 
 #team-vs-team-view .fader {
   position: absolute;
@@ -5918,7 +5933,7 @@ a, a:hover, a:visited, a:active, a:focus {
   pointer-events: none;
   opacity: 0;
   filter: alpha(opacity=0); }
-#team-vs-team-view .scaler {
+#team-vs-team-view .scale-container {
   position: absolute;
   z-index: 1;
   left: 50%;
@@ -5929,7 +5944,7 @@ a, a:hover, a:visited, a:active, a:focus {
   -webkit-transform: scale(1, 1);
   transform: scale(1, 1);
   transform-origin: center center; }
-  #team-vs-team-view .scaler #one-game-copy {
+  #team-vs-team-view .scale-container #one-game-copy {
     position: absolute;
     z-index: 2;
     width: 550px;
@@ -5942,42 +5957,41 @@ a, a:hover, a:visited, a:active, a:focus {
     top: 50%;
     margin: -263px -275px;
     padding: 0; }
-    #team-vs-team-view .scaler #one-game-copy .fade-off {
+    #team-vs-team-view .scale-container #one-game-copy .fade-off {
       opacity: 0;
       filter: alpha(opacity=0); }
-    #team-vs-team-view .scaler #one-game-copy h1 {
+    #team-vs-team-view .scale-container #one-game-copy h1 {
       font-size: 307px;
       margin: 0; }
-    #team-vs-team-view .scaler #one-game-copy h2 {
+    #team-vs-team-view .scale-container #one-game-copy h2 {
       font-size: 215px;
       margin-top: -100px;
       margin-bottom: 0; }
-    #team-vs-team-view .scaler #one-game-copy h3 {
+    #team-vs-team-view .scale-container #one-game-copy h3 {
       font-size: 123px;
       margin-top: -65px;
       margin-bottom: 0; }
-  #team-vs-team-view .scaler .team-wedge {
+  #team-vs-team-view .scale-container .team-wedge {
     position: absolute;
     height: 1050px; }
-  #team-vs-team-view .scaler .team-logo {
+  #team-vs-team-view .scale-container .team-logo {
     position: absolute;
+    z-index: 3;
     width: 320px;
     transform-origin: center center;
     top: 50%;
     margin: -160px 0;
     opacity: 0;
     filter: alpha(opacity=0); }
-  #team-vs-team-view .scaler #portland-wedge {
-    background: url("images/team-vs-team/portland-wedge.png") no-repeat;
+  #team-vs-team-view .scale-container #portland-wedge {
     width: 1498px;
     left: -1498px; }
-    #team-vs-team-view .scaler #portland-wedge #portland-logo {
+    #team-vs-team-view .scale-container #portland-wedge #portland-logo {
       left: 300px; }
-  #team-vs-team-view .scaler #dallas-wedge {
-    background: url("images/team-vs-team/dallas-wedge.png") no-repeat;
+  #team-vs-team-view .scale-container #dallas-wedge {
     width: 1557px;
     right: -1557px; }
-    #team-vs-team-view .scaler #dallas-wedge #dallas-logo {
+    #team-vs-team-view .scale-container #dallas-wedge #dallas-logo {
       right: 300px; }
 
 #final-frame-view {
@@ -6052,7 +6066,7 @@ a, a:hover, a:visited, a:active, a:focus {
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1);
     transform-origin: bottom left; }
-  #final-frame-view .info-scaler {
+  #final-frame-view .info-scale-container {
     position: absolute;
     z-index: 1;
     left: 0;
@@ -6063,7 +6077,7 @@ a, a:hover, a:visited, a:active, a:focus {
     transform: scale(1, 1);
     transform-origin: top left;
     padding: 30px 0 0 30px; }
-    #final-frame-view .info-scaler .vs-copy {
+    #final-frame-view .info-scale-container .vs-copy {
       display: inline-block;
       background-color: #ffffff;
       height: 80px;
@@ -6073,24 +6087,24 @@ a, a:hover, a:visited, a:active, a:focus {
       font-family: "DINNextLTPro-Heavy";
       font-size: 82.57px;
       color: #000000; }
-      #final-frame-view .info-scaler .vs-copy p {
+      #final-frame-view .info-scale-container .vs-copy p {
         margin-top: -10px; }
-    #final-frame-view .info-scaler .date-wrapper {
+    #final-frame-view .info-scale-container .date-wrapper {
       margin-top: 44px; }
-      #final-frame-view .info-scaler .date-wrapper div {
+      #final-frame-view .info-scale-container .date-wrapper div {
         display: inline-block;
         height: 33px;
         font-size: 47px; }
-        #final-frame-view .info-scaler .date-wrapper div p {
+        #final-frame-view .info-scale-container .date-wrapper div p {
           margin: -10px 0 0 0; }
-      #final-frame-view .info-scaler .date-wrapper .date-part {
+      #final-frame-view .info-scale-container .date-wrapper .date-part {
         font-family: "DINNextLTPro-Medium";
         border-right: 7px solid #d0ad68;
         padding-right: 22px; }
-      #final-frame-view .info-scaler .date-wrapper .time-part {
+      #final-frame-view .info-scale-container .date-wrapper .time-part {
         font-family: "DINNextLTPro-Heavy";
         padding-left: 22px; }
-    #final-frame-view .info-scaler img.live-on-logo {
+    #final-frame-view .info-scale-container img.live-on-logo {
       margin-top: 37px;
       width: 534px; }
   #final-frame-view .hotspot-wrapper {
